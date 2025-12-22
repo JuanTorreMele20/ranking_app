@@ -279,7 +279,7 @@ app.post("/api/players/bulk-results", requireAdmin, (req, res) => {
     }
 
     // ✅ Puntos: +1 por PG, -0.25 por PP
-    const deltaPoints = (pgDelta * 1) - (ppDelta * 0.25);
+    const deltaPoints = (pgDelta * 2) - (ppDelta * 0.25);
     const newPoints = player.points + deltaPoints;
 
     // redondeo a 2 decimales para evitar floats raros
