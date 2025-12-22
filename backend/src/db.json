@@ -1,0 +1,94 @@
+{
+  "players": [
+    {
+      "id": 1,
+      "name": "Soriano",
+      "createdAt": "2025-12-22",
+      "pj": 0,
+      "pg": 0,
+      "pp": 0,
+      "plenos": 0,
+      "points": 0
+    },
+    {
+      "id": 2,
+      "name": "Caito",
+      "createdAt": "2025-12-22",
+      "pj": 5,
+      "pg": 3,
+      "pp": 2,
+      "plenos": 0,
+      "points": 2.5
+    },
+    {
+      "id": 3,
+      "name": "Pitoniso",
+      "createdAt": "2025-12-22",
+      "pj": 2,
+      "pg": 2,
+      "pp": 0,
+      "plenos": 1,
+      "points": 2
+    },
+    {
+      "id": 4,
+      "name": "El Petas",
+      "createdAt": "2025-12-22",
+      "pj": 0,
+      "pg": 0,
+      "pp": 0,
+      "plenos": 0,
+      "points": 0
+    },
+    {
+      "id": 5,
+      "name": "La Lola",
+      "createdAt": "2025-12-22",
+      "pj": 0,
+      "pg": 0,
+      "pp": 0,
+      "plenos": 0,
+      "points": 0
+    },
+    {
+      "id": 6,
+      "name": "Sorianito",
+      "createdAt": "2025-12-22",
+      "pj": 0,
+      "pg": 0,
+      "pp": 0,
+      "plenos": 0,
+      "points": 0
+    },
+    {
+      "id": 7,
+      "name": "Greenville",
+      "createdAt": "2025-12-22",
+      "pj": 0,
+      "pg": 0,
+      "pp": 0,
+      "plenos": 0,
+      "points": 0
+    },
+    {
+      "id": 8,
+      "name": "Canario",
+      "createdAt": "2025-12-22",
+      "pj": 0,
+      "pg": 0,
+      "pp": 0,
+      "plenos": 0,
+      "points": 0
+    },
+    {
+      "id": 9,
+      "name": "PABLOMOTOS",
+      "createdAt": "2025-12-22",
+      "pj": 0,
+      "pg": 0,
+      "pp": 0,
+      "plenos": 0,
+      "points": 0
+    }
+  ]
+}

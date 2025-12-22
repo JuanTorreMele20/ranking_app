@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update resultados</title>
+    <link rel="stylesheet" href="./css/ranking.css" />
+</head>
+
+<body data-page="update">
+<header class="topbar">
+    <button onclick="window.location.href='/ranking.html'" class="btn secondary">← Volver</button>
+    <h1>ACTUALIZACIÓN SEMANAL</h1>
+</header>
+
+<main class="card">
+    <h2>Apuntar resultados de la semana</h2>
+
+    <div class="tableWrap">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Jugador</th>
+                <th>PG semana</th>
+                <th>PP semana</th>
+            </tr>
+            </thead>
+            <tbody id="updateBody"></tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <button id="applyWeeklyBtn" class="btn">Actualizar resultados</button>
+        <span id="updateMsg" class="msg"></span>
+    </div>
+</main>
+
+<script src="/main.js"></script>
+</body>
+</html>

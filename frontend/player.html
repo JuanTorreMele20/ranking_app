@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfil jugador</title>
+
+    <!-- CSS DEL PLAYER -->
+    <link rel="stylesheet" href="./css/ranking.css" />
+</head>
+
+<body data-page="player">
+
+<header class="topbar">
+    <button onclick="window.location.href='/ranking.html'" class="btn secondary">
+        ← Volver
+    </button>
+</header>
+
+<main class="card player-card">
+
+    <h1 id="playerName" class="player-title">Jugador</h1>
+
+    <!-- INFO GENERAL -->
+    <section class="player-section">
+
+        <div class="field">
+            <label>Primera APARICIÓN</label>
+            <div id="playerCreatedAt" class="value">-</div>
+        </div>
+
+        <div class="field highlight">
+            <label>Puntos</label>
+            <div id="playerPoints" class="value big">-</div>
+        </div>
+
+    </section>
+
+    <!-- ACCIONES (SOLO ADMIN) -->
+    <hr />
+
+    <section id="adminPlayerActions" class="player-section hidden">
+        <div class="field">
+            <label>Admin</label>
+            <button id="deleteBtn" class="btn secondary" type="button">Delete</button>
+            <div id="deleteMsg" class="msg"></div>
+        </div>
+    </section>
+
+    <hr />
+
+    <!-- ESTADÍSTICAS -->
+    <section class="player-section">
+
+        <div class="field">
+            <label>Partidos jugados (PJ)</label>
+            <div id="playerPJ" class="value">-</div>
+        </div>
+
+        <div class="field">
+            <label>Partidos ganados (PG)</label>
+            <div id="playerPG" class="value">-</div>
+        </div>
+
+        <div class="field">
+            <label>Partidos perdidos (PP)</label>
+            <div id="playerPP" class="value">-</div>
+        </div>
+
+        <div class="field">
+            <label>Plenos</label>
+            <div id="playerPlenos" class="value">-</div>
+        </div>
+
+        <div class="field highlight">
+            <label>% Victorias</label>
+            <div id="playerWinRate" class="value big">-</div>
+        </div>
+
+    </section>
+
+</main>
+
+<script src="/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+/* RESET BÁSICO */
+* {
+    box-sizing: border-box;
+}
+
+/* BODY */
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 0;
+
+
+    /* IMAGEN DE FONDO */
+    background-image: url("../images/fondo_login.png");
+    background-size: cover;        /* Cubre toda la pantalla */
+    background-position: center;   /* Centrada */
+    background-repeat: no-repeat;  /* No repetir */
+
+    min-height: 100vh;
+    margin: 0;
+
+    /* Centrar la card */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* TARJETA LOGIN */
+.card {
+    width: 320px;
+    margin: 80px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.08);
+    text-align: center;
+}
+
+/* LOGO */
+.logo {
+    width: 200px;
+    margin-bottom: 5px;
+}
+
+/* TITULO */
+h2 {
+    margin-bottom: 20px;
+}
+
+/* INPUTS */
+input {
+    width: 80%;
+    padding: 5px;
+    margin: 5px 0;
+}
+
+/* BOTÓN */
+button {
+    width: 50%;
+    padding: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+/* ERROR */
+.error {
+    color: #b00020;
+    margin-top: 10px;
+}
+
+/* AYUDA */
+.hint {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 15px;
+}

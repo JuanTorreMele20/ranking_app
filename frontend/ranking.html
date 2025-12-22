@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ranking</title>
+    <link rel="stylesheet" href="./css/ranking.css" />
+</head>
+
+<body data-page="ranking">
+<header class="topbar">
+    <div>
+        <h1>RANKING LOS PAQUETES</h1>
+    </div>
+    <button id="logoutBtn" class="btn secondary">Cerrar sesión</button>
+</header>
+
+<!-- SOLO ADMIN: panel para crear jugadores -->
+<section id="adminPanel" class="card hidden">
+    <h2>Añadir jugador</h2>
+
+    <form id="addPlayerForm" class="grid">
+        <div>
+            <label>Nombre</label>
+            <input id="newName" required />
+        </div>
+
+        <div class="full">
+            <button class="btn" type="submit">Añadir</button>
+            <button class="btn secondary" type="button" id="goUpdateBtn">
+                Añadir resultados de la semana
+            </button>
+            <span id="adminMsg" class="msg"></span>
+        </div>
+    </form>
+</section>
+
+<main class="card">
+    <h2>Tabla</h2>
+
+    <div class="tableWrap">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Jugador</th>
+                <th>PJ</th>
+                <th>PG</th>
+                <th>PP</th>
+                <th>PLENOS</th>
+                <th>Puntos</th>
+                <th id="thActions" class="hidden">Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="rankingBody"></tbody>
+        </table>
+    </div>
+</main>
+
+
+<script src="/main.js"></script>
+</body>
+</html>
