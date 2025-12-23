@@ -3,7 +3,6 @@ import express from "express";
 import session from "express-session";
 import path from "path";
 import { fileURLToPath } from "url";
-import fs from "fs";
 import { readDB, writeDB } from "./db.js";
 
 const app = express();
@@ -34,7 +33,7 @@ app.use(
   })
 );
 
-// ====== "DB" EN MEMORIA (PERSISTIDA EN src/db.json) ======
+// ====== "DB" EN MEMORIA (PERSISTIDA EN db.json EN DATA_DIR) ======
 const USERS = [
   { username: "admin", password: "javi", role: "Admin" },
   { username: "player", password: "player123", role: "Player" },
@@ -50,7 +49,7 @@ const DEFAULT_PLAYERS = [
     pg: 7,
     pp: 3,
     plenos: 2,
-    points: 21
+    points: 21,
   },
   {
     id: 2,
@@ -60,7 +59,7 @@ const DEFAULT_PLAYERS = [
     pg: 4,
     pp: 4,
     plenos: 1,
-    points: 12
+    points: 12,
   },
   {
     id: 3,
@@ -70,26 +69,50 @@ const DEFAULT_PLAYERS = [
     pg: 8,
     pp: 3,
     plenos: 3,
-    points: 24
+    points: 24,
   },
 ];
 
-function ensureDBFile() {
-  const dbPath = path.join(process.cwd(), "src", "db.json");
-  if (!fs.existsSync(dbPath)) {
-    writeDB({ players: DEFAULT_PLAYERS });
+function nextIdFromPlayers(players) {
+  const maxId = players.reduce((max, p) => Math.max(max, Number(p.id) || 0), 0);
+  return maxId + 1;
+}
+
+function ensureDBSeed() {
+  // ✅ db.js ya crea el archivo si no existe
+  // Aquí SOLO metemos DEFAULT_PLAYERS la primera vez (si está vacío)
+  const db = readDB();
+  const players = Array.isArray(db.players) ? db.players : [];
+
+  if (players.length === 0) {
+    writeDB({
+      players: DEFAULT_PLAYERS,
+      nextId: nextIdFromPlayers(DEFAULT_PLAYERS),
+    });
+  } else {
+    // Si existe pero le falta nextId (por versiones anteriores), lo reparamos:
+    if (!db.nextId || typeof db.nextId !== "number") {
+      db.nextId = nextIdFromPlayers(players);
+      writeDB(db);
+    }
   }
 }
 
-ensureDBFile();
+ensureDBSeed();
 
 function loadPlayers() {
   const db = readDB();
   return Array.isArray(db.players) ? db.players : [];
 }
 
+// ✅ FIX: NO machacamos la estructura del JSON (nextId etc.)
 function savePlayers(players) {
-  writeDB({ players });
+  const db = readDB();
+  db.players = players;
+  if (!db.nextId || typeof db.nextId !== "number") {
+    db.nextId = nextIdFromPlayers(players);
+  }
+  writeDB(db);
 }
 
 function todayISO() {
@@ -114,12 +137,6 @@ function requireAdmin(req, res, next) {
   }
   next();
 }
-
-function nextIdFromPlayers(players) {
-  const maxId = players.reduce((max, p) => Math.max(max, Number(p.id) || 0), 0);
-  return maxId + 1;
-}
-
 
 // ====== SERVIR FRONTEND ======
 app.use(express.static(frontendPath));
@@ -210,7 +227,7 @@ app.get("/api/players/:id", requireAuth, (req, res) => {
       pg: player.pg,
       pp: player.pp,
       plenos: player.plenos,
-      points: player.points
+      points: player.points,
     },
   });
 });
@@ -245,9 +262,10 @@ app.post("/api/players/bulk-results", requireAdmin, (req, res) => {
   const { results } = req.body;
 
   if (!Array.isArray(results)) {
-    return res
-      .status(400)
-      .json({ ok: false, error: "Formato inválido. Se espera { results: [...] }" });
+    return res.status(400).json({
+      ok: false,
+      error: "Formato inválido. Se espera { results: [...] }",
+    });
   }
 
   const PLAYERS = loadPlayers();
@@ -278,8 +296,8 @@ app.post("/api/players/bulk-results", requireAdmin, (req, res) => {
       player.plenos += 1;
     }
 
-    // ✅ Puntos: +1 por PG, -0.25 por PP
-    const deltaPoints = (pgDelta * 2) - (ppDelta * 0.25);
+    // ✅ Puntos: +2 por PG, -0.25 por PP (según tu fórmula actual)
+    const deltaPoints = pgDelta * 2 - ppDelta * 0.25;
     const newPoints = player.points + deltaPoints;
 
     // redondeo a 2 decimales para evitar floats raros
@@ -289,9 +307,6 @@ app.post("/api/players/bulk-results", requireAdmin, (req, res) => {
   savePlayers(PLAYERS);
   return res.json({ ok: true });
 });
-
-
-
 
 // Editar jugador (SOLO ADMIN)
 app.patch("/api/players/:id", requireAdmin, (req, res) => {
@@ -321,16 +336,12 @@ app.patch("/api/players/:id", requireAdmin, (req, res) => {
   player.pp = Number(player.pp) || 0;
 
   // ✅ Recalcular puntos SIEMPRE al guardar
-  const recalculated = (player.pg * 1) - (player.pp * 0.25);
+  const recalculated = player.pg * 1 - player.pp * 0.25;
   player.points = Math.round(recalculated * 100) / 100; // 2 decimales
-
-  // (opcional) si no quieres negativos, descomenta:
-  // player.points = Math.max(0, player.points);
 
   savePlayers(PLAYERS);
   return res.json({ ok: true, player });
 });
-
 
 // Borrar jugador (SOLO ADMIN)
 app.delete("/api/players/:id", requireAdmin, (req, res) => {
@@ -352,4 +363,5 @@ app.delete("/api/players/:id", requireAdmin, (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Backend corriendo en http://localhost:${PORT}`);
   console.log(`📁 Frontend servido desde: ${frontendPath}`);
+  console.log(`💾 DB en carpeta persistente DATA_DIR: ${process.env.DATA_DIR || "(default ./data)"}`);
 });
