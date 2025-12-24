@@ -35,11 +35,13 @@
         <h3>Editar jugador (solo Admin)</h3>
 
         <div class="grid">
-            <div class="field">
+            <!-- FILA 1: Nombre (ancho completo) -->
+            <div class="field full">
                 <label>Nombre</label>
                 <input id="editName" class="smallInput" />
             </div>
 
+            <!-- FILA 2: PG / PP / PLENOS -->
             <div class="field">
                 <label>PG</label>
                 <input id="editPG" type="number" min="0" class="smallInput" />
@@ -62,21 +64,19 @@
         </div>
     </section>
 
-
-    <hr />
-
     <hr />
 
     <!-- ACCIONES ADMIN (BORRAR) -->
     <section id="adminPlayerActions" class="player-section hidden">
         <div class="field">
-            <label>Admin</label>
-            <button id="deleteBtn" class="btn secondary" type="button">Delete</button>
+            <label>¿Quieres borrar al jugador?</label>
+            <button id="deleteBtn" class="btn secondary" type="button">Borrar Jugador</button>
             <div id="deleteMsg" class="msg"></div>
         </div>
     </section>
 
-    <hr />
+    <!-- ✅ ESTE ES EL ÚLTIMO HR: SOLO ADMIN -->
+    <hr id="adminOnlyHr" class="hidden" />
 
     <!-- ESTADÍSTICAS -->
     <section class="player-section">

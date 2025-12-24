@@ -184,8 +184,13 @@ async function initPlayerPage() {
   const saveBtn = document.querySelector("#savePlayerBtn");
   const saveMsg = document.querySelector("#savePlayerMsg");
 
+  const adminOnlyHr = document.querySelector("#adminOnlyHr");
+
   if (isAdmin) {
     adminEditPanel?.classList.remove("hidden");
+    adminEditPanel?.classList.remove("hidden");
+    adminPlayerActions?.classList.remove("hidden");
+    adminOnlyHr?.classList.remove("hidden");
 
     editName.value = String(p.name ?? "");
     editPG.value = String(p.pg ?? 0);
@@ -221,6 +226,9 @@ async function initPlayerPage() {
     });
   } else {
     adminEditPanel?.classList.add("hidden");
+    adminEditPanel?.classList.add("hidden");
+    adminPlayerActions?.classList.add("hidden");
+    adminOnlyHr?.classList.add("hidden");
   }
 
   // Admin: borrar jugador (si lo tienes)
