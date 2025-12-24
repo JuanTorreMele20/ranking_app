@@ -21,9 +21,12 @@ async function logout() {
 // ---------- RANKING (solo lectura) ----------
 function rowHtml({ idx, p }) {
   const rowClass =
-    (idx === 1) ? "row-top1" :
-    (idx >= 2 && idx <= 8) ? "row-top8" :
+    (idx === 1) ? "row-gold" :
+    (idx >= 2 && idx <= 8) ? "row-silver" :
+    (idx >= 9 && idx <= 16) ? "row-bronze" :
+    (idx >= 17 && idx <= 24) ? "row-green" :
     "";
+
 
   return `<tr data-id="${p.id}" class="${rowClass}">
     <td>${idx}</td>

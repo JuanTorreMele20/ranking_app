@@ -166,17 +166,31 @@ input{
 
 
 
-/* Highlight ranking rows (manteniendo transparencia) */
-.table tbody tr.row-top1 td {
-  background-color: rgba(255, 215, 0, 0.22); /* amarillo suave */
+/* 🥇 ORO – 1º */
+.table tbody tr.row-gold td {
+  background-color: rgba(255, 215, 0, 0.22);
 }
 
-.table tbody tr.row-top8 td {
-  background-color: rgba(135, 206, 235, 0.16); /* azul suave para 2º-8º */
+/* 🥈 PLATA – 2º a 8º */
+.table tbody tr.row-silver td {
+  background-color: rgba(192, 192, 192, 0.20);
 }
 
-/* Opcional: un pequeño borde para que se note sin “pintar demasiado” */
-.table tbody tr.row-top1 td:first-child,
-.table tbody tr.row-top8 td:first-child {
+/* 🥉 BRONCE – 9º a 16º */
+.table tbody tr.row-bronze td {
+  background-color: rgba(205, 127, 50, 0.20);
+}
+
+/* 🟢 VERDE – 17º a 24º */
+.table tbody tr.row-green td {
+  background-color: rgba(144, 238, 144, 0.16);
+}
+
+/* Detalle sutil para marcar filas especiales */
+.table tbody tr.row-gold td:first-child,
+.table tbody tr.row-silver td:first-child,
+.table tbody tr.row-bronze td:first-child,
+.table tbody tr.row-green td:first-child {
   box-shadow: inset 3px 0 0 rgba(255, 255, 255, 0.25);
 }
+
