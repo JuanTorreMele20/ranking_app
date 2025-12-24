@@ -318,34 +318,34 @@ app.patch("/api/players/:id", requireAdmin, (req, res) => {
     return res.status(404).json({ ok: false, error: "Jugador no encontrado" });
   }
 
-  // Guardamos valores anteriores
-  const prevPG = Number(player.pg) || 0;
-  const prevPP = Number(player.pp) || 0;
-
-  const allowed = ["name", "pj", "pg", "pp", "plenos"];
+  // Permitidos: NO pj, NO points
+  const allowed = ["name", "pg", "pp", "plenos"];
 
   for (const key of allowed) {
     if (key in req.body) {
-      if (key === "name") {
-        player.name = String(req.body.name).trim();
-      } else {
-        player[key] = Number(req.body[key]) || 0;
-      }
+      if (key === "name") player.name = String(req.body.name).trim();
+      else player[key] = Math.max(0, Number(req.body[key]) || 0);
     }
   }
 
-  const newPG = Number(player.pg) || 0;
-  const newPP = Number(player.pp) || 0;
+  // Normaliza
+  player.pg = Number(player.pg) || 0;
+  player.pp = Number(player.pp) || 0;
+  player.plenos = Number(player.plenos) || 0;
 
-  // ✅ SOLO recalcular puntos si cambian PG o PP
-  if (newPG !== prevPG || newPP !== prevPP) {
-    const recalculated = newPG * 1 - newPP * 0.25;
-    player.points = Math.round(recalculated * 100) / 100;
-  }
+  // ✅ Recalcular PJ siempre
+  player.pj = player.pg + player.pp;
+
+  // ✅ Recalcular puntos siempre con la regla correcta
+  //   Ganado = +2
+  //   Perdido = -0.25
+  const recalculated = (player.pg * 2) - (player.pp * 0.25);
+  player.points = Math.round(recalculated * 100) / 100;
 
   savePlayers(PLAYERS);
   return res.json({ ok: true, player });
 });
+
 
 
 // Borrar jugador (SOLO ADMIN)

@@ -18,9 +18,7 @@ async function logout() {
   window.location.href = "/login.html";
 }
 
-let RANKING_EDIT_MODE = false;
-
-// ---------- RANKING ----------
+// ---------- RANKING (solo lectura) ----------
 function rowHtml({ idx, p }) {
   const rowClass =
     (idx === 1) ? "row-top1" :
@@ -38,7 +36,6 @@ function rowHtml({ idx, p }) {
   </tr>`;
 }
 
-
 async function loadRanking() {
   const res = await api("/api/ranking");
   if (!res) return;
@@ -52,11 +49,9 @@ async function loadRanking() {
   tbody.innerHTML = "";
 
   ranking.forEach((p, i) => {
-    // idx empieza en 1 para el ranking
     tbody.insertAdjacentHTML("beforeend", rowHtml({ idx: i + 1, p }));
   });
 
-  // Click en fila -> ir a player.html
   tbody.querySelectorAll("tr").forEach((tr) => {
     tr.addEventListener("click", () => {
       const id = tr.getAttribute("data-id");
@@ -65,36 +60,25 @@ async function loadRanking() {
   });
 }
 
-
-
 async function initRankingPage() {
-  // Comprobamos sesión
   const meRes = await api("/api/me");
   if (!meRes) return;
-
   const me = await meRes.json();
+
   const role = me.user?.role || "";
   const username = me.user?.username || "";
   const isAdmin = role === "Admin";
 
-  // Mostrar usuario
   const who = document.querySelector("#who");
-  if (who) {
-    who.textContent = `${username} (${role})`;
-  }
+  if (who) who.textContent = `${username} (${role})`;
 
-  // Logout
   document.querySelector("#logoutBtn")?.addEventListener("click", logout);
 
-  // Panel admin (crear jugador + update semanal)
+  // Panel admin
   const adminPanel = document.querySelector("#adminPanel");
-  if (isAdmin) {
-    adminPanel?.classList.remove("hidden");
-  } else {
-    adminPanel?.classList.add("hidden");
-  }
+  if (isAdmin) adminPanel?.classList.remove("hidden");
 
-  // Botón ir a update semanal
+  // Botón update semanal
   const goUpdateBtn = document.querySelector("#goUpdateBtn");
   if (isAdmin && goUpdateBtn) {
     goUpdateBtn.addEventListener("click", () => {
@@ -102,21 +86,16 @@ async function initRankingPage() {
     });
   }
 
-  // Form añadir jugador (solo admin)
+  // Crear jugador (solo nombre)
   const addForm = document.querySelector("#addPlayerForm");
-  if (addForm && isAdmin) {
+  if (addForm) {
     addForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (!isAdmin) return;
 
-      const nameInput = document.querySelector("#newName");
+      const name = document.querySelector("#newName").value.trim();
       const msg = document.querySelector("#adminMsg");
       msg.textContent = "";
-
-      const name = nameInput.value.trim();
-      if (!name) {
-        msg.textContent = "El nombre es obligatorio";
-        return;
-      }
 
       const res = await api("/api/players", {
         method: "POST",
@@ -126,28 +105,24 @@ async function initRankingPage() {
 
       const out = await res.json();
       if (!res.ok) {
-        msg.textContent = out.error || "Error al crear jugador";
+        msg.textContent = out.error || "Error al crear";
         return;
       }
 
-      nameInput.value = "";
+      document.querySelector("#newName").value = "";
       msg.textContent = "Jugador añadido ✅";
-
       await loadRanking();
     });
   }
 
-  // Cargar ranking
   await loadRanking();
 }
-
 
 // ---------- PLAYER ----------
 function getQueryParam(key) {
   const url = new URL(window.location.href);
   return url.searchParams.get(key);
 }
-
 function safeText(el, txt) {
   if (el) el.textContent = txt;
 }
@@ -155,13 +130,12 @@ function safeText(el, txt) {
 async function initPlayerPage() {
   document.querySelector("#logoutBtn")?.addEventListener("click", logout);
 
-  // Saber si es Admin para mostrar botón Delete
+  // Sesión + rol
   let isAdmin = false;
   const meRes = await api("/api/me");
-  if (meRes) {
-    const me = await meRes.json();
-    isAdmin = me.user?.role === "Admin";
-  }
+  if (!meRes) return;
+  const me = await meRes.json();
+  isAdmin = me.user?.role === "Admin";
 
   const id = Number(getQueryParam("id"));
   if (!id) {
@@ -170,9 +144,11 @@ async function initPlayerPage() {
     return;
   }
 
+  // Cargar jugador
   const res = await api(`/api/players/${id}`);
   if (!res) return;
   const out = await res.json();
+
   if (!res.ok) {
     alert(out.error || "No se pudo cargar el jugador");
     window.location.href = "/ranking.html";
@@ -181,6 +157,7 @@ async function initPlayerPage() {
 
   const p = out.player;
 
+  // Pintar datos
   safeText(document.querySelector("#playerName"), p.name ?? "Jugador");
   safeText(document.querySelector("#playerCreatedAt"), p.createdAt || "-");
   safeText(document.querySelector("#playerPoints"), String(p.points ?? 0));
@@ -195,28 +172,19 @@ async function initPlayerPage() {
   const winRate = pj > 0 ? Math.round((pg / pj) * 100) : 0;
   safeText(document.querySelector("#playerWinRate"), `${winRate}%`);
 
-  // Acciones admin: borrar jugador
-  const adminActions = document.querySelector("#adminPlayerActions");
-  const deleteBtn = document.querySelector("#deleteBtn");
-  const deleteMsg = document.querySelector("#deleteMsg");
-
-
-
-
+  // Admin: panel editar
   const adminEditPanel = document.querySelector("#adminEditPanel");
-  const saveBtn = document.querySelector("#savePlayerBtn");
-  const saveMsg = document.querySelector("#savePlayerMsg");
-
-  const editPJ = document.querySelector("#editPJ");
+  const editName = document.querySelector("#editName");
   const editPG = document.querySelector("#editPG");
   const editPP = document.querySelector("#editPP");
   const editPlenos = document.querySelector("#editPlenos");
+  const saveBtn = document.querySelector("#savePlayerBtn");
+  const saveMsg = document.querySelector("#savePlayerMsg");
 
-  // Si es admin, mostramos panel y pre-cargamos valores
   if (isAdmin) {
     adminEditPanel?.classList.remove("hidden");
 
-    editPJ.value = String(p.pj ?? 0);
+    editName.value = String(p.name ?? "");
     editPG.value = String(p.pg ?? 0);
     editPP.value = String(p.pp ?? 0);
     editPlenos.value = String(p.plenos ?? 0);
@@ -225,10 +193,11 @@ async function initPlayerPage() {
       saveMsg.textContent = "";
 
       const payload = {
-        pj: Number(editPJ.value) || 0,
-        pg: Number(editPG.value) || 0,
-        pp: Number(editPP.value) || 0,
-        plenos: Number(editPlenos.value) || 0,
+        name: editName.value.trim(),
+        pg: Math.max(0, Number(editPG.value) || 0),
+        pp: Math.max(0, Number(editPP.value) || 0),
+        plenos: Math.max(0, Number(editPlenos.value) || 0),
+        // PJ NO se manda: lo recalcula el backend como pg+pp
       };
 
       const r = await api(`/api/players/${id}`, {
@@ -238,51 +207,60 @@ async function initPlayerPage() {
       });
       if (!r) return;
 
-      const out = await r.json();
+      const o = await r.json();
       if (!r.ok) {
-        alert(out.error || "No se pudo guardar");
+        alert(o.error || "No se pudo guardar");
         return;
       }
 
       saveMsg.textContent = "Guardado ✅";
-
-      // Recargar la página para mostrar valores actualizados (incluidos puntos recalculados)
       window.location.reload();
     });
   } else {
     adminEditPanel?.classList.add("hidden");
   }
 
+  // Admin: borrar jugador (si lo tienes)
+  const adminActions = document.querySelector("#adminPlayerActions");
+  const deleteBtn = document.querySelector("#deleteBtn");
+  const deleteMsg = document.querySelector("#deleteMsg");
+
+  if (isAdmin && deleteBtn) {
+    adminActions?.classList.remove("hidden");
+
+    deleteBtn.addEventListener("click", async () => {
+      const ok = confirm(`¿Seguro que quieres borrar a "${p.name}"?`);
+      if (!ok) return;
+
+      if (deleteMsg) deleteMsg.textContent = "";
+
+      const delRes = await api(`/api/players/${id}`, { method: "DELETE" });
+      if (!delRes) return;
+      const delOut = await delRes.json();
+
+      if (!delRes.ok) {
+        alert(delOut.error || "No se pudo borrar el jugador");
+        return;
+      }
+
+      window.location.href = "/ranking.html";
+    });
+  } else {
+    adminActions?.classList.add("hidden");
+  }
 }
-
-// ---------- AUTO INIT ----------
-document.addEventListener("DOMContentLoaded", () => {
-  const page = document.body.dataset.page;
-  if (page === "ranking") initRankingPage();
-  if (page === "player") initPlayerPage();
-  if (page === "update") initUpdatePage();
-});
-
 
 // ---------- UPDATE (semanal) ----------
 function updateRowHtml({ idx, p }) {
-  const rowClass = (idx === 1) ? "row-top1" : (idx >= 2 && idx <= 8) ? "row-top8" : "";
-
-  return `<tr data-id="${p.id}" class="${rowClass}">
-
+  return `<tr data-id="${p.id}">
     <td>${idx}</td>
     <td>${p.name}</td>
-    <td>
-      <input class="smallInput" type="number" min="0" value="0" data-week="pg" data-id="${p.id}" />
-    </td>
-    <td>
-      <input class="smallInput" type="number" min="0" value="0" data-week="pp" data-id="${p.id}" />
-    </td>
+    <td><input class="smallInput" type="number" min="0" value="0" data-week="pg" data-id="${p.id}" /></td>
+    <td><input class="smallInput" type="number" min="0" value="0" data-week="pp" data-id="${p.id}" /></td>
   </tr>`;
 }
 
 async function initUpdatePage() {
-  // Si no hay sesión, api() redirige a login. Además, comprobamos Admin.
   const meRes = await api("/api/me");
   if (!meRes) return;
   const me = await meRes.json();
@@ -298,10 +276,11 @@ async function initUpdatePage() {
   const tbody = document.querySelector("#updateBody");
   const applyBtn = document.querySelector("#applyWeeklyBtn");
 
+  if (!tbody || !applyBtn || !msg) return;
+
   msg.textContent = "";
   tbody.innerHTML = "";
 
-  // Reutilizamos /api/ranking para traer jugadores con id+name (y stats si quieres)
   const res = await api("/api/ranking");
   if (!res) return;
   const data = await res.json();
@@ -317,15 +296,12 @@ async function initUpdatePage() {
     const payload = players.map((p) => {
       const pgInput = tbody.querySelector(`input[data-week="pg"][data-id="${p.id}"]`);
       const ppInput = tbody.querySelector(`input[data-week="pp"][data-id="${p.id}"]`);
-
       const pgDelta = Math.max(0, Number(pgInput?.value ?? 0) || 0);
       const ppDelta = Math.max(0, Number(ppInput?.value ?? 0) || 0);
-
       return { id: p.id, pgDelta, ppDelta };
     });
 
-    // Si todo está a 0, no hacemos nada
-    const anyChange = payload.some(x => (x.pgDelta + x.ppDelta) > 0);
+    const anyChange = payload.some((x) => (x.pgDelta + x.ppDelta) > 0);
     if (!anyChange) {
       msg.textContent = "No hay cambios (todo está a 0).";
       return;
@@ -344,7 +320,14 @@ async function initUpdatePage() {
     }
 
     msg.textContent = "Resultados actualizados ✅";
-    // Opcional: volver al ranking
     window.location.href = "/ranking.html";
   });
 }
+
+// ---------- AUTO INIT ----------
+document.addEventListener("DOMContentLoaded", () => {
+  const page = document.body.dataset.page;
+  if (page === "ranking") initRankingPage();
+  if (page === "player") initPlayerPage();
+  if (page === "update") initUpdatePage();
+});

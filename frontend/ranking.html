@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MaxxLevelPadel-Ranking</title>
+    <title>Ranking</title>
     <link rel="stylesheet" href="./css/ranking.css" />
 </head>
 
@@ -11,13 +11,14 @@
 <header class="topbar">
     <div>
         <h1>RANKING LOS PAQUETES</h1>
+        <div id="who" class="muted"></div>
     </div>
     <button id="logoutBtn" class="btn secondary">Cerrar sesión</button>
 </header>
 
-<!-- SOLO ADMIN: panel para crear jugadores -->
+<!-- SOLO ADMIN -->
 <section id="adminPanel" class="card hidden">
-    <h2>Añadir jugador</h2>
+    <h2>Admin</h2>
 
     <form id="addPlayerForm" class="grid">
         <div>
@@ -25,11 +26,13 @@
             <input id="newName" required />
         </div>
 
-        <div class="full">
-            <button class="btn" type="submit">Añadir</button>
+        <div class="full" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+            <button class="btn" type="submit">Añadir jugador</button>
+
             <button class="btn secondary" type="button" id="goUpdateBtn">
-                Añadir resultados de la semana
+                Añadir resultados (semana)
             </button>
+
             <span id="adminMsg" class="msg"></span>
         </div>
     </form>
@@ -41,21 +44,20 @@
     <div class="tableWrap">
         <table class="table">
             <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Jugador</th>
-                    <th>PJ</th>
-                    <th>PG</th>
-                    <th>PP</th>
-                    <th>PLENOS</th>
-                    <th>Puntos</th>
-                </tr>
+            <tr>
+                <th>#</th>
+                <th>Jugador</th>
+                <th>PJ</th>
+                <th>PG</th>
+                <th>PP</th>
+                <th>PLENOS</th>
+                <th>Puntos</th>
+            </tr>
             </thead>
             <tbody id="rankingBody"></tbody>
         </table>
     </div>
 </main>
-
 
 <script src="/main.js"></script>
 </body>

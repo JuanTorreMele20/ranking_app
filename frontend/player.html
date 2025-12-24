@@ -3,25 +3,22 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jugador</title>
+    <title>Perfil jugador</title>
     <link rel="stylesheet" href="./css/ranking.css" />
 </head>
 
 <body data-page="player">
-
 <header class="topbar">
-    <button class="btn secondary" onclick="window.location.href='/ranking.html'">← Volver</button>
+    <button onclick="window.location.href='/ranking.html'" class="btn secondary">← Volver</button>
     <button id="logoutBtn" class="btn secondary">Cerrar sesión</button>
 </header>
 
 <main class="card player-card">
-
     <h1 id="playerName" class="player-title">Jugador</h1>
 
-    <!-- INFO PRINCIPAL -->
     <section class="player-section">
         <div class="field">
-            <label>Primera aparición</label>
+            <label>Primera APARICIÓN</label>
             <div id="playerCreatedAt" class="value">-</div>
         </div>
 
@@ -33,44 +30,14 @@
 
     <hr />
 
-    <!-- ESTADÍSTICAS -->
-    <section class="player-section">
-        <div class="field">
-            <label>PJ</label>
-            <div id="playerPJ" class="value">-</div>
-        </div>
-
-        <div class="field">
-            <label>PG</label>
-            <div id="playerPG" class="value">-</div>
-        </div>
-
-        <div class="field">
-            <label>PP</label>
-            <div id="playerPP" class="value">-</div>
-        </div>
-
-        <div class="field">
-            <label>PLENOS</label>
-            <div id="playerPlenos" class="value">-</div>
-        </div>
-
-        <div class="field highlight">
-            <label>% Victorias</label>
-            <div id="playerWinRate" class="value big">-</div>
-        </div>
-    </section>
-
-    <hr />
-
     <!-- PANEL ADMIN: EDITAR JUGADOR -->
     <section id="adminEditPanel" class="player-section hidden">
         <h3>Editar jugador (solo Admin)</h3>
 
         <div class="grid">
             <div class="field">
-                <label>PJ</label>
-                <input id="editPJ" type="number" min="0" class="smallInput" />
+                <label>Nombre</label>
+                <input id="editName" class="smallInput" />
             </div>
 
             <div class="field">
@@ -95,16 +62,44 @@
         </div>
     </section>
 
-    <!-- PANEL ADMIN: BORRAR JUGADOR -->
+    <!-- ACCIONES ADMIN (BORRAR) -->
     <section id="adminPlayerActions" class="player-section hidden">
-        <h3>Admin</h3>
-
-        <div class="field full" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <div class="field">
+            <label>Admin</label>
             <button id="deleteBtn" class="btn secondary" type="button">Delete</button>
-            <span id="deleteMsg" class="msg"></span>
+            <div id="deleteMsg" class="msg"></div>
         </div>
     </section>
 
+    <hr />
+
+    <!-- ESTADÍSTICAS -->
+    <section class="player-section">
+        <div class="field">
+            <label>Partidos jugados (PJ)</label>
+            <div id="playerPJ" class="value">-</div>
+        </div>
+
+        <div class="field">
+            <label>Partidos ganados (PG)</label>
+            <div id="playerPG" class="value">-</div>
+        </div>
+
+        <div class="field">
+            <label>Partidos perdidos (PP)</label>
+            <div id="playerPP" class="value">-</div>
+        </div>
+
+        <div class="field">
+            <label>Plenos</label>
+            <div id="playerPlenos" class="value">-</div>
+        </div>
+
+        <div class="field highlight">
+            <label>% Victorias</label>
+            <div id="playerWinRate" class="value big">-</div>
+        </div>
+    </section>
 </main>
 
 <script src="/main.js"></script>
