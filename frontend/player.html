@@ -3,29 +3,25 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MaxxLevelPadel-Perfil jugador</title>
-
-    <!-- CSS DEL PLAYER -->
+    <title>Jugador</title>
     <link rel="stylesheet" href="./css/ranking.css" />
 </head>
 
 <body data-page="player">
 
 <header class="topbar">
-    <button onclick="window.location.href='/ranking.html'" class="btn secondary">
-        ← Volver
-    </button>
+    <button class="btn secondary" onclick="window.location.href='/ranking.html'">← Volver</button>
+    <button id="logoutBtn" class="btn secondary">Cerrar sesión</button>
 </header>
 
 <main class="card player-card">
 
     <h1 id="playerName" class="player-title">Jugador</h1>
 
-    <!-- INFO GENERAL -->
+    <!-- INFO PRINCIPAL -->
     <section class="player-section">
-
         <div class="field">
-            <label>Primera APARICIÓN</label>
+            <label>Primera aparición</label>
             <div id="playerCreatedAt" class="value">-</div>
         </div>
 
@@ -33,42 +29,29 @@
             <label>Puntos</label>
             <div id="playerPoints" class="value big">-</div>
         </div>
-
-    </section>
-
-    <!-- ACCIONES (SOLO ADMIN) -->
-    <hr />
-
-    <section id="adminPlayerActions" class="player-section hidden">
-        <div class="field">
-            <label>Admin</label>
-            <button id="deleteBtn" class="btn secondary" type="button">Delete</button>
-            <div id="deleteMsg" class="msg"></div>
-        </div>
     </section>
 
     <hr />
 
     <!-- ESTADÍSTICAS -->
     <section class="player-section">
-
         <div class="field">
-            <label>Partidos jugados (PJ)</label>
+            <label>PJ</label>
             <div id="playerPJ" class="value">-</div>
         </div>
 
         <div class="field">
-            <label>Partidos ganados (PG)</label>
+            <label>PG</label>
             <div id="playerPG" class="value">-</div>
         </div>
 
         <div class="field">
-            <label>Partidos perdidos (PP)</label>
+            <label>PP</label>
             <div id="playerPP" class="value">-</div>
         </div>
 
         <div class="field">
-            <label>Plenos</label>
+            <label>PLENOS</label>
             <div id="playerPlenos" class="value">-</div>
         </div>
 
@@ -76,7 +59,50 @@
             <label>% Victorias</label>
             <div id="playerWinRate" class="value big">-</div>
         </div>
+    </section>
 
+    <hr />
+
+    <!-- PANEL ADMIN: EDITAR JUGADOR -->
+    <section id="adminEditPanel" class="player-section hidden">
+        <h3>Editar jugador (solo Admin)</h3>
+
+        <div class="grid">
+            <div class="field">
+                <label>PJ</label>
+                <input id="editPJ" type="number" min="0" class="smallInput" />
+            </div>
+
+            <div class="field">
+                <label>PG</label>
+                <input id="editPG" type="number" min="0" class="smallInput" />
+            </div>
+
+            <div class="field">
+                <label>PP</label>
+                <input id="editPP" type="number" min="0" class="smallInput" />
+            </div>
+
+            <div class="field">
+                <label>PLENOS</label>
+                <input id="editPlenos" type="number" min="0" class="smallInput" />
+            </div>
+
+            <div class="field full" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                <button id="savePlayerBtn" class="btn" type="button">Guardar cambios</button>
+                <span id="savePlayerMsg" class="msg"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- PANEL ADMIN: BORRAR JUGADOR -->
+    <section id="adminPlayerActions" class="player-section hidden">
+        <h3>Admin</h3>
+
+        <div class="field full" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+            <button id="deleteBtn" class="btn secondary" type="button">Delete</button>
+            <span id="deleteMsg" class="msg"></span>
+        </div>
     </section>
 
 </main>

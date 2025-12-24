@@ -36,7 +36,7 @@ app.use(
 // ====== "DB" EN MEMORIA (PERSISTIDA EN db.json EN DATA_DIR) ======
 const USERS = [
   { username: "admin", password: "javi", role: "Admin" },
-  { username: "player", password: "player123", role: "Player" },
+  { username: "player", password: "paquete", role: "Player" },
 ];
 
 // -- Carga/Inicializa DB --
