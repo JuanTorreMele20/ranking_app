@@ -43,7 +43,12 @@ function rowHtml({ idx, p, isAdmin }) {
          </td>`
       : `<td>${val}</td>`;
 
-  return `<tr data-id="${p.id}">
+  const rowClass =
+    (idx === 1) ? "row-top1" :
+    (idx >= 2 && idx <= 8) ? "row-top8" :
+    "";
+
+  return `<tr data-id="${p.id}" class="${rowClass}">
     <td>${idx}</td>
     ${nameCell}
     ${cellNum("pj", p.pj)}
@@ -54,6 +59,7 @@ function rowHtml({ idx, p, isAdmin }) {
     ${actions}
   </tr>`;
 }
+
 
 async function loadRanking(isAdmin) {
   const res = await api("/api/ranking");
@@ -274,7 +280,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ---------- UPDATE (semanal) ----------
 function updateRowHtml({ idx, p }) {
-  return `<tr data-id="${p.id}">
+  const rowClass = (idx === 1) ? "row-top1" : (idx >= 2 && idx <= 8) ? "row-top8" : "";
+
+  return `<tr data-id="${p.id}" class="${rowClass}">
+
     <td>${idx}</td>
     <td>${p.name}</td>
     <td>

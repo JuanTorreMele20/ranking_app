@@ -158,3 +158,25 @@ input{
 .playerTitle{
   margin: 0;
 }
+
+
+
+
+
+
+
+
+/* Highlight ranking rows (manteniendo transparencia) */
+.table tbody tr.row-top1 td {
+  background-color: rgba(255, 215, 0, 0.22); /* amarillo suave */
+}
+
+.table tbody tr.row-top8 td {
+  background-color: rgba(135, 206, 235, 0.16); /* azul suave para 2º-8º */
+}
+
+/* Opcional: un pequeño borde para que se note sin “pintar demasiado” */
+.table tbody tr.row-top1 td:first-child,
+.table tbody tr.row-top8 td:first-child {
+  box-shadow: inset 3px 0 0 rgba(255, 255, 255, 0.25);
+}
