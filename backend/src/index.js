@@ -318,7 +318,10 @@ app.patch("/api/players/:id", requireAdmin, (req, res) => {
     return res.status(404).json({ ok: false, error: "Jugador no encontrado" });
   }
 
-  // Campos editables desde ranking (NO points)
+  // Guardamos valores anteriores
+  const prevPG = Number(player.pg) || 0;
+  const prevPP = Number(player.pp) || 0;
+
   const allowed = ["name", "pj", "pg", "pp", "plenos"];
 
   for (const key of allowed) {
@@ -331,17 +334,19 @@ app.patch("/api/players/:id", requireAdmin, (req, res) => {
     }
   }
 
-  // Normaliza por si faltaban
-  player.pg = Number(player.pg) || 0;
-  player.pp = Number(player.pp) || 0;
+  const newPG = Number(player.pg) || 0;
+  const newPP = Number(player.pp) || 0;
 
-  // ✅ Recalcular puntos SIEMPRE al guardar
-  const recalculated = player.pg * 1 - player.pp * 0.25;
-  player.points = Math.round(recalculated * 100) / 100; // 2 decimales
+  // ✅ SOLO recalcular puntos si cambian PG o PP
+  if (newPG !== prevPG || newPP !== prevPP) {
+    const recalculated = newPG * 1 - newPP * 0.25;
+    player.points = Math.round(recalculated * 100) / 100;
+  }
 
   savePlayers(PLAYERS);
   return res.json({ ok: true, player });
 });
+
 
 // Borrar jugador (SOLO ADMIN)
 app.delete("/api/players/:id", requireAdmin, (req, res) => {
