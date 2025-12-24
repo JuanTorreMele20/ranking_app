@@ -35,7 +35,7 @@ app.use(
 
 // ====== "DB" EN MEMORIA (PERSISTIDA EN db.json EN DATA_DIR) ======
 const USERS = [
-  { username: "admin", password: "javi", role: "Admin" },
+  { username: "admin", password: "javipaquete", role: "Admin" },
   { username: "player", password: "paquete", role: "Player" },
 ];
 
