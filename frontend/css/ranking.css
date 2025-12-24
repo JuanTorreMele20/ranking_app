@@ -109,7 +109,7 @@ h1{ margin:0; letter-spacing:.5px; }
 
 label{ display:block; margin-bottom:6px; color: var(--muted); font-size: 13px; }
 input{
-  width:75%;
+  width:100%;
   padding: 10px 10px;
   border-radius: 10px;
   border: 1px solid var(--border);
